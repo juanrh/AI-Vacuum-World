@@ -39,7 +39,7 @@ public class VacuumWorld extends AbstractEnvironment {
 	private VacuumState currentState;
 
 	public VacuumWorld(Location vacuumloc, int [][] world) {
-		currentState = new VacuumState(new Location(0,0), new int[][]{new int[]{0,0,0},new int[]{0,5,0}});
+		currentState = new VacuumState(vacuumloc, world);
 	}
 
 	@Override
