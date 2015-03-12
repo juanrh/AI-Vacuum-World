@@ -119,4 +119,8 @@ public class VacuumState implements EnvironmentState, State{
 		
 	}
 
+	public int getDirtAt(int x, int y) {
+		return cells[x][y];
+	}
+
 }

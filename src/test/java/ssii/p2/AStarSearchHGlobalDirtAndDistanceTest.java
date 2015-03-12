@@ -15,13 +15,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */	
 
-package ssii.p1;
+package ssii.p2;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import ssii.p1.Utils;
 import ssii.p1.actions.Down;
 import ssii.p1.actions.Left;
 import ssii.p1.actions.Location;
@@ -41,6 +42,7 @@ import aima.core.search.framework.Problem;
 import aima.core.search.framework.QueueSearch;
 import aima.core.search.framework.ResultFunction;
 import aima.core.search.framework.TreeSearch;
+import aima.core.search.informed.AStarSearch;
 import aima.core.search.uninformed.BreadthFirstSearch;
 import aima.core.search.uninformed.DepthFirstSearch;
 import junit.framework.Test;
@@ -49,7 +51,7 @@ import junit.framework.TestSuite;
 
 
 
-public class BreadthFirstSearchTest 
+public class AStarSearchHGlobalDirtAndDistanceTest 
     extends TestCase
 {
     /**
@@ -57,7 +59,7 @@ public class BreadthFirstSearchTest
      *
      * @param testName name of the test case
      */
-    public BreadthFirstSearchTest( String testName )
+    public AStarSearchHGlobalDirtAndDistanceTest( String testName )
     {
         super( testName );
     }
@@ -67,12 +69,29 @@ public class BreadthFirstSearchTest
      */
     public static Test suite()
     {
-        return new TestSuite( BreadthFirstSearchTest.class );
+        return new TestSuite( AStarSearchHGlobalDirtAndDistanceTest.class );
     }
     
-    public List<Action> getActions(VacuumState initialState){
+    public List<Action> getActions(VacuumState initialState) throws Exception{
     	QueueSearch qs=new TreeSearch();
-    	BreadthFirstSearch bfs=new aima.core.search.uninformed.BreadthFirstSearch(qs);   	    	
+    	aima.core.search.framework.HeuristicFunction hf=new 
+    			aima.core.search.framework.HeuristicFunction(){
+					@Override
+					public double h(Object state) {
+						VacuumState vs=(VacuumState)state;
+						int distance=0;
+						for (int x=0;x<vs.getWidth();x++)
+							for (int y=0;y<vs.getHeight();y++)
+								if (vs.getDirtAt(x,y)>0){
+									distance=distance+
+											(x-vs.getLocation().getX())*(x-vs.getLocation().getX())+
+											(y-vs.getLocation().getY())*(y-vs.getLocation().getY());
+								}
+						return vs.getGlobalDirtCount()+distance;
+					}
+    		
+    	};
+    	AStarSearch bfs=new aima.core.search.informed.AStarSearch(qs,hf);   	    	
    		
 		ActionsFunction actionsFunction = new VacuumActionsFunction();
 		
@@ -80,17 +99,21 @@ public class BreadthFirstSearchTest
 		
 		GoalTest goalTest = new VacuumGoalTest();
 		
-		
 		Problem vacuumProblem=new Problem(initialState,actionsFunction,resultFunction,goalTest);
     	List<Action> actions = bfs.search(vacuumProblem);    
+    	
     	return actions;
     }
     
   
-    public void testApp()
+    public void testApp() throws Exception
     {
-        VacuumState initialState = new VacuumState(new Location(0,0), 
-    			new int[][]{new int[]{0,0,0},new int[]{0,5,0}}); 			
+    	int[][] world=new int[][]{
+				new int[]{0,0,0},
+				new int[]{0,0,0},
+				new int[]{0,5,0}};
+		VacuumState initialState = new VacuumState(new Location(0,0), 
+				world);		
     	List<Action> actions = getActions(initialState);    	
     	Object previousState=initialState;
     	for (Action action:actions){
@@ -100,15 +123,14 @@ public class BreadthFirstSearchTest
     	junit.framework.Assert.assertTrue("There should be no dirt and there is some in this map \n"+previousState+ " after executing "+actions, ((VacuumState)previousState).getGlobalDirtCount()==0);    	
     }
     
-    public static void main(String args[]){
-    	BreadthFirstSearchTest dfst=new BreadthFirstSearchTest("BreadthFirstSearch");
+    public static void main(String args[]) throws Exception{
+    	AStarSearchHGlobalDirtAndDistanceTest dfst=new AStarSearchHGlobalDirtAndDistanceTest("AStar");
     	int[][] world=new int[][]{
     			new int[]{0,0,0},
     			new int[]{0,0,0},
     			new int[]{0,5,0}};
     	VacuumState initialState = new VacuumState(new Location(0,0), 
     			world);
-    	
     	List<Action> actions = dfst.getActions(initialState);
     	System.out.println("solution:" + actions);      
     	Utils.animate(actions,initialState);
