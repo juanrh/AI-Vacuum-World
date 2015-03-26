@@ -111,8 +111,10 @@ public class HillClimbingTest
     	List<Action> actions = getActions(initialState);    	
     	Object previousState=initialState;
     	for (Action action:actions){
-    		OOAction oaction=(OOAction)action;    		
-    		previousState= oaction.perform(previousState);
+		if (action instanceof OOAction){ 
+    		 OOAction oaction=(OOAction)action;    		
+    		 previousState= oaction.perform(previousState);
+		}
     	}    	
     	    	
     }
