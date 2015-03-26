@@ -31,9 +31,13 @@ public class Utils {
     	Object previousState=initialState;
     	for (Action act:actions){
     		System.out.println("Action: "+act);
+    		if (act instanceof OOAction ){
     		Object nextState=((OOAction)act).perform(previousState);    		
     		System.out.println(nextState);
     		previousState=nextState;
+    		} else {
+    			// It is a noop, so the state remains the same
+    		}
     	}
     	
     }
