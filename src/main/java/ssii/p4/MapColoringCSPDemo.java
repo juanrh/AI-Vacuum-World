@@ -5,7 +5,6 @@ import aima.core.search.csp.BacktrackingStrategy;
 import aima.core.search.csp.CSP;
 import aima.core.search.csp.CSPStateListener;
 import aima.core.search.csp.ImprovedBacktrackingStrategy;
-import aima.core.search.csp.MapCSP;
 import aima.core.search.csp.MinConflictsStrategy;
 import aima.core.search.csp.SolutionStrategy;
 
