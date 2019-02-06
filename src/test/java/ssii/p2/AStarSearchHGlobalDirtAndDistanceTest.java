@@ -72,38 +72,7 @@ public class AStarSearchHGlobalDirtAndDistanceTest
         return new TestSuite( AStarSearchHGlobalDirtAndDistanceTest.class );
     }
     
-    public List<Action> getActions(VacuumState initialState) throws Exception{
-    	QueueSearch qs=new TreeSearch();
-    	aima.core.search.framework.HeuristicFunction hf=new 
-    			aima.core.search.framework.HeuristicFunction(){
-					@Override
-					public double h(Object state) {
-						VacuumState vs=(VacuumState)state;
-						int distance=0;
-						for (int x=0;x<vs.getWidth();x++)
-							for (int y=0;y<vs.getHeight();y++)
-								if (vs.getDirtAt(x,y)>0){
-									distance=distance+
-											(x-vs.getLocation().getX())*(x-vs.getLocation().getX())+
-											(y-vs.getLocation().getY())*(y-vs.getLocation().getY());
-								}
-						return vs.getGlobalDirtCount()+distance;
-					}
-    		
-    	};
-    	AStarSearch bfs=new aima.core.search.informed.AStarSearch(qs,hf);   	    	
-   		
-		ActionsFunction actionsFunction = new VacuumActionsFunction();
-		
-		ResultFunction resultFunction = new VacuumResultFunction();
-		
-		GoalTest goalTest = new VacuumGoalTest();
-		
-		Problem vacuumProblem=new Problem(initialState,actionsFunction,resultFunction,goalTest);
-    	List<Action> actions = bfs.search(vacuumProblem);    
-    	
-    	return actions;
-    }
+   
     
   
     public void testApp() throws Exception
@@ -114,7 +83,7 @@ public class AStarSearchHGlobalDirtAndDistanceTest
 				new int[]{0,5,0}};
 		VacuumState initialState = new VacuumState(new Location(0,0), 
 				world);		
-    	List<Action> actions = getActions(initialState);    	
+    	List<Action> actions = new EjemploAStarGDirAndDistance().getActions(initialState);    	
     	Object previousState=initialState;
     	for (Action action:actions){
     		OOAction oaction=(OOAction)action;    		
@@ -123,19 +92,7 @@ public class AStarSearchHGlobalDirtAndDistanceTest
     	junit.framework.Assert.assertTrue("There should be no dirt and there is some in this map \n"+previousState+ " after executing "+actions, ((VacuumState)previousState).getGlobalDirtCount()==0);    	
     }
     
-    public static void main(String args[]) throws Exception{
-    	AStarSearchHGlobalDirtAndDistanceTest dfst=new AStarSearchHGlobalDirtAndDistanceTest("AStar");
-    	int[][] world=new int[][]{
-    			new int[]{0,0,0},
-    			new int[]{0,0,0},
-    			new int[]{0,5,0}};
-    	VacuumState initialState = new VacuumState(new Location(0,0), 
-    			world);
-    	List<Action> actions = dfst.getActions(initialState);
-    	System.out.println("solution:" + actions);      
-    	Utils.animate(actions,initialState);
-    	
-    }
+  
     
    
 

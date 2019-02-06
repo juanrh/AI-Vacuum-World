@@ -35,6 +35,7 @@ import ssii.p1.actions.VacuumActionsFunction;
 import ssii.p1.actions.VacuumResultFunction;
 import ssii.p1.agent.VacuumGoalTest;
 import ssii.p1.state.VacuumState;
+import ssii.p2.EjemploAStarHGlobalDirt;
 import aima.core.agent.Action;
 import aima.core.search.framework.ActionsFunction;
 import aima.core.search.framework.GoalTest;
@@ -72,32 +73,6 @@ public class HillClimbingTest
         return new TestSuite( HillClimbingTest.class );
     }
     
-    public List<Action> getActions(VacuumState initialState) throws Exception{
-    	QueueSearch qs=new TreeSearch();
-    	aima.core.search.framework.HeuristicFunction hf=new 
-    			aima.core.search.framework.HeuristicFunction(){
-					@Override
-					public double h(Object state) {
-						VacuumState vs=(VacuumState)state;
-						
-						return (vs.getGlobalDirtCount());
-					}
-    		
-    	};
-    	aima.core.search.local.HillClimbingSearch hcs=new aima.core.search.local.HillClimbingSearch(hf);   	    	
-   		
-		ActionsFunction actionsFunction = new VacuumActionsFunction();
-		
-		ResultFunction resultFunction = new VacuumResultFunction();
-		
-		GoalTest goalTest = new VacuumGoalTest();
-		
-		Problem vacuumProblem=new Problem(initialState,actionsFunction,resultFunction,goalTest);
-    	List<Action> actions = hcs.search(vacuumProblem);    
-    	
-    	return actions;
-    }
-    
   
     public void testApp() throws Exception
     {
@@ -108,7 +83,7 @@ public class HillClimbingTest
     	
 		VacuumState initialState = new VacuumState(new Location(0,0), 
 				world);		
-    	List<Action> actions = getActions(initialState);    	
+    	List<Action> actions = new EjemploClimbing().getActions(initialState);    	
     	Object previousState=initialState;
     	for (Action action:actions){
 		if (action instanceof OOAction){ 
@@ -118,21 +93,7 @@ public class HillClimbingTest
     	}    	
     	    	
     }
-    
-    public static void main(String args[]) throws Exception{
-    	HillClimbingTest dfst=new HillClimbingTest("HillClimbing");
-    	int[][] world=new int[][]{
-    			new int[]{0,0,0},
-    			new int[]{0,0,0},
-    			new int[]{0,5,0}};
-    	    	
-    	VacuumState initialState = new VacuumState(new Location(0,0), 
-    			world);
-    	List<Action> actions = dfst.getActions(initialState);
-    	System.out.println("solution:" + actions);       	
-    	Utils.animate(actions,initialState);
-    	
-    }
+ 
     
    
 
