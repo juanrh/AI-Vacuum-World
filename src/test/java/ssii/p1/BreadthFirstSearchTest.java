@@ -49,6 +49,7 @@ import junit.framework.TestSuite;
 
 
 
+
 public class BreadthFirstSearchTest 
     extends TestCase
 {
@@ -70,6 +71,7 @@ public class BreadthFirstSearchTest
         return new TestSuite( BreadthFirstSearchTest.class );
     }
     
+ 
     public List<Action> getActions(VacuumState initialState){
     	QueueSearch qs=new TreeSearch();
     	BreadthFirstSearch bfs=new aima.core.search.uninformed.BreadthFirstSearch(qs);   	    	
@@ -80,42 +82,36 @@ public class BreadthFirstSearchTest
 		
 		GoalTest goalTest = new VacuumGoalTest();
 		
-		
 		Problem vacuumProblem=new Problem(initialState,actionsFunction,resultFunction,goalTest);
     	List<Action> actions = bfs.search(vacuumProblem);    
     	return actions;
     }
-    
   
-    public void testApp()
-    {
-        VacuumState initialState = new VacuumState(new Location(0,0), 
-    			new int[][]{new int[]{0,0,0},new int[]{0,5,0}}); 			
+    
+    public void runApp(int [] [] world) {
+    	VacuumState initialState = new VacuumState(
+        		new Location(0,0), 
+    			world); 			
     	List<Action> actions = getActions(initialState);    	
     	Object previousState=initialState;
     	for (Action action:actions){
     		OOAction oaction=(OOAction)action;    		
     		previousState= oaction.perform(previousState);
     	}    	
-    	junit.framework.Assert.assertTrue("There should be no dirt and there is some in this map \n"+previousState+ " after executing "+actions, ((VacuumState)previousState).getGlobalDirtCount()==0);    	
+    	org.junit.Assert.assertTrue("There should be no "
+    			+ "dirt and there is some in this map \n"+
+    			previousState+ " after executing "+
+    			actions, ((VacuumState)previousState).getGlobalDirtCount()==0);
     }
     
-    public static void main(String args[]){
-    	BreadthFirstSearchTest dfst=new BreadthFirstSearchTest("BreadthFirstSearch");
-    	int[][] world=new int[][]{
-    			new int[]{0,0,0},
-    			new int[]{0,0,0},
-    			new int[]{0,5,0}};
-    	VacuumState initialState = new VacuumState(new Location(0,0), 
-    			world);
-    	
-    	List<Action> actions = dfst.getActions(initialState);
-    	System.out.println("solution:" + actions);      
-    	Utils.animate(actions,initialState);
-    	
-    }
     
-   
+    public void testApp( )
+    {
+            	runApp(new int[][]{
+        			new int[]{0,0,0},
+        			new int[]{0,5,0}});
+    }
+       
 
 	
 }

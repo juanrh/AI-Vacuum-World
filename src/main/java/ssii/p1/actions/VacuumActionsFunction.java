@@ -17,6 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package ssii.p1.actions;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Vector;
 
@@ -27,7 +28,7 @@ import aima.core.search.framework.ActionsFunction;
 public class VacuumActionsFunction implements ActionsFunction {
 	public Set<Action> actions(Object state) {				
 		VacuumState vs=(VacuumState)state;
-		HashSet<Action> possibleActions=new HashSet<Action>();
+		HashSet<Action> possibleActions=new LinkedHashSet<Action>();
 		Vector<OOAction> candidates=new Vector<OOAction>();
 		candidates.add(new Left());
 		candidates.add(new Right());

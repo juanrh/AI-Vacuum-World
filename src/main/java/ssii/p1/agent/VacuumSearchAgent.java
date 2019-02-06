@@ -96,7 +96,8 @@ public class VacuumSearchAgent extends SimpleProblemSolvingAgent {
 	@Override
 	protected void notifyViewOfMetrics() {
 		// TODO Auto-generated method stub
-
+		
 	}
+
 
 }

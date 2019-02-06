@@ -18,6 +18,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package ssii.p1;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -39,6 +40,7 @@ import aima.core.search.framework.QueueSearch;
 import aima.core.search.framework.ResultFunction;
 import aima.core.search.framework.TreeSearch;
 import aima.core.search.uninformed.DepthFirstSearch;
+import aima.core.search.uninformed.IterativeDeepeningSearch;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -68,10 +70,7 @@ public class DepthFirstSearchTest
   
     public List<Action> getActions(VacuumState initialState){
     	QueueSearch qs=new TreeSearch();
-    	DepthFirstSearch dfs=new DepthFirstSearch(qs);   	    	
-   	
-   
-		
+    	DepthFirstSearch dfs=new DepthFirstSearch(qs);
 		ActionsFunction actionsFunction = new ActionsFunction(){			
 			public Set<Action> actions(Object state) {				
 				VacuumState vs=(VacuumState)state;
@@ -108,32 +107,36 @@ public class DepthFirstSearchTest
 		
 		
 		Problem vacuumProblem=new Problem(initialState,actionsFunction,resultFunction,goalTest);
-    	List<Action> actions = dfs.search(vacuumProblem);
+    	List<Action> actions=null;
+		try {
+			actions = dfs.search(vacuumProblem);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     	return actions;
     }
 
-    
-    public void testApp()
-    {
-    	VacuumState initialState = new VacuumState(new Location(0,0), new int[][]{new int[]{0,0,0},new int[]{0,0,0},new int[]{0,5,0}});
+    public void runApp(int [][] world) {
+    	VacuumState initialState = new VacuumState(new Location(0,0), world);
     	List<Action> actions = getActions(initialState);
     	Object previousState=initialState;
     	for (Action action:actions){
     		OOAction oaction=(OOAction)action;    		
     		previousState= oaction.perform(previousState);
     	}    	
-    	junit.framework.Assert.assertTrue("There should be no dirt and there is some in this map \n"+previousState+ " after executing "+actions, ((VacuumState)previousState).getGlobalDirtCount()==0);
+    	org.junit.Assert.assertTrue("There should be no dirt and there is some in this map \n"+previousState+ " after executing "+actions, 
+    			((VacuumState)previousState).getGlobalDirtCount() == 0);    	
     }
     
-    public static void main(String args[]){
-    	DepthFirstSearchTest dfst=new DepthFirstSearchTest("DepthFirstSearch");
-    	VacuumState initialState = new VacuumState(new Location(0,0), new int[][]{new int[]{0,0,0},new int[]{0,0,0},new int[]{0,5,0}});
-    	List<Action> actions = dfst.getActions(initialState);
-    	System.out.println("solution:" + actions);      
-    	Utils.animate(actions,initialState);
-    	
+    public void testApp( )
+    {
+    	runApp( new int[][]{
+    		new int[]{0,0,0},
+    		new int[]{0,0,0},
+    		new int[]{0,5,0}});
     }
-    
+        
    
 
 	
