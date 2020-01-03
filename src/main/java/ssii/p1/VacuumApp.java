@@ -26,10 +26,13 @@ public class VacuumApp {
 		ssii.p1.world.VacuumWorld env = new VacuumWorld(new Location(0, 0),
 				new int[][] { new int[] { 0, 0, 0 }, new int[] { 0, 5, 0 } });
 		ssii.p1.agent.VacuumSearchAgent vsa = new ssii.p1.agent.VacuumSearchAgent();
+				//new ssii.p1.agent.VacuumSearchAgent((ssii.p1.state.VacuumState) env.getCurrentState());
 		env.addAgent(vsa);
 		while (true) {
+//			env.step();
+			System.out.println(env.getCurrentState());
 			env.step();
-			System.out.println(env.getCurrentState());			
+			System.out.flush();
 			Thread.currentThread().sleep(2000);
 			if (((ssii.p1.state.VacuumState) env.getCurrentState())
 					.getGlobalDirtCount() == 0) {

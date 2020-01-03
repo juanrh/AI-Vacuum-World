@@ -3,7 +3,7 @@ package ssii.p1.agent;
 import ssii.p1.actions.Location;
 import aima.core.agent.Percept;
 
-public class VacuumPercept implements Percept {
+public class VacuumPercept { // implements Percept {
 	private Location loc=null;
 	private int dirt=0;
 	

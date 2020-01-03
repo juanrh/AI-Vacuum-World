@@ -26,8 +26,8 @@ import aima.core.search.framework.Problem;
 public class VacuumState implements EnvironmentState, State{
 	int cells[][];	
 	Location vacLoc=new Location(0,0);
-	final static int WIDTH=10;
-	final static int HEIGHT=10;
+//	final static int WIDTH=10;
+//	final static int HEIGHT=10;
 
 	public VacuumState(Location vacuumloc, int [][] world){
 		this.vacLoc=vacuumloc;
@@ -86,6 +86,7 @@ public class VacuumState implements EnvironmentState, State{
 	}
 
 	public void suck(int aid){
+		System.out.println("Cleaning cell x=" + vacLoc.getX() + ",y=" + vacLoc.getY());
 		cells[vacLoc.getX()][vacLoc.getY()]=0;
 	}
 	public String toString(){
@@ -115,7 +116,9 @@ public class VacuumState implements EnvironmentState, State{
 	public void addDirt() {
 		int x=(int)(Math.random()*cells.length);
 		int y=(int)(Math.random()*cells[0].length);
-		cells[x][y]=5;
+		int dirtAmount = 5;
+		System.out.println("Adding " + dirtAmount + " dirt to cell x=" + x  + ",y=" + y);
+		cells[x][y]=dirtAmount;
 		
 	}
 

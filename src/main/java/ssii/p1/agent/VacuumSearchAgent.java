@@ -45,16 +45,17 @@ import aima.core.search.framework.TreeSearch;
 import aima.core.search.uninformed.BreadthFirstSearch;
 
 public class VacuumSearchAgent extends SimpleProblemSolvingAgent {
-	VacuumState ms=new VacuumState(new Location(0,0), 
-			new int[][]{new int[]{0,0,0},new int[]{0,5,0}});
+	private VacuumState ms; 
+//	=new VacuumState(new Location(0,0), 
+//			new int[][]{new int[]{0,0,0},new int[]{0,5,0}});
 
 	public VacuumSearchAgent() {
-
+//		this.ms = ms;
 	}
 
-	public VacuumSearchAgent(int maxGoalsToFormulate) {
-		super(maxGoalsToFormulate);		
-	}
+//	public VacuumSearchAgent(int maxGoalsToFormulate) {
+//		super(maxGoalsToFormulate);		
+//	}
 
 	@Override
 	protected State updateState(Percept p) {
@@ -87,9 +88,14 @@ public class VacuumSearchAgent extends SimpleProblemSolvingAgent {
 
 	@Override
 	protected List<Action> search(Problem problem) {
+		System.out.println("Searching for a solution");
 		QueueSearch qs=new TreeSearch();
 		BreadthFirstSearch bfs=new aima.core.search.uninformed.BreadthFirstSearch(qs);   	    	
-		List<Action> actions = bfs.search(problem);    	
+		List<Action> actions = bfs.search(problem);
+		System.out.println("Solution found:");
+		for (Action action: actions) {
+			System.out.println("\t" + action);
+		}
 		return actions;
 	}
 
